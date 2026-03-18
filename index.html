@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drum Kids - Lesson 7: The Offbeat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* VISUAL KIDS & NEON STYLE */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #0f172a;
+            background-image: radial-gradient(circle at 50% 50%, #1e293b 2px, transparent 2px);
+            background-size: 40px 40px;
+            color: white;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        h1, h2, h3, .fun-font { font-family: 'Fredoka', cursive; }
+        .gpu-accelerated { transform: translateZ(0); will-change: transform; }
+        
+        /* Language Buttons - Com Imagens Reais */
+        .lang-active { opacity: 1; transform: scale(1.15); border-color: #a855f7; background-color: rgba(168, 85, 247, 0.4); box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
+        .lang-idle { opacity: 0.4; border-color: transparent; background-color: rgba(30, 41, 59, 0.5); }
+        .lang-idle:hover { opacity: 0.8; transform: scale(1.05); border-color: #475569; }
+
+        /* Neon Colors for Instruments */
+        .neon-box-yellow { box-shadow: 0 0 10px rgba(250, 204, 21, 0.3), inset 0 0 5px rgba(250, 204, 21, 0.1); border-color: #facc15 !important; }
+        .neon-box-blue { box-shadow: 0 0 10px rgba(99, 102, 241, 0.3), inset 0 0 5px rgba(99, 102, 241, 0.1); border-color: #6366f1 !important; }
+        .neon-box-red { box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), inset 0 0 5px rgba(239, 68, 68, 0.1); border-color: #ef4444 !important; }
+
+        .beat-active { transform: scale(1.15) translateZ(0); filter: brightness(1.5); z-index: 20; transition: transform 0.05s ease-out; }
+        .grid-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); transform: translateZ(0); }
+        .grid-btn:active { transform: scale(0.95); }
+
+        /* Luzes Indicadoras */
+        .metronome-active { background-color: #eab308; box-shadow: 0 0 15px #eab308; transform: scale(1.1); }
+        .indicator-idle { background-color: #1e293b; opacity: 0.5; transform: scale(1); }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 md:p-8" onload="initPage()">
+
+    <!-- TOP BAR: RETURN TO MENU & LANGUAGES -->
+    <div class="w-full max-w-6xl flex flex-col-reverse sm:flex-row justify-between items-center gap-4 mb-6">
+        
+        <!-- BACK TO MENU BUTTON -->
+        <a href="https://espaco-liberdade.github.io/drumkids" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border-2 border-slate-600 px-6 py-3 rounded-2xl font-bold transition-all flex items-center gap-3 fun-font text-xl shadow-lg">
+            <span>👈</span> <span id="t-backBtn">BACK TO MENU</span>
+        </a>
+
+        <!-- LANGUAGES (Ordem Alfabética com FlagCDN) -->
+        <div class="flex justify-end gap-2">
+            <button onclick="setLanguage('de')" id="lang-de" class="lang-idle border-2 rounded-xl px-2 py-1 transition-all flex items-center justify-center">
+                <img src="https://flagcdn.com/w40/de.png" alt="Deutsch" class="w-6 h-auto rounded-sm">
+            </button>
+            <button onclick="setLanguage('en')" id="lang-en" class="lang-active border-2 rounded-xl px-2 py-1 transition-all flex items-center justify-center">
+                <img src="https://flagcdn.com/w40/us.png" alt="English" class="w-6 h-auto rounded-sm">
+            </button>
+            <button onclick="setLanguage('es')" id="lang-es" class="lang-idle border-2 rounded-xl px-2 py-1 transition-all flex items-center justify-center">
+                <img src="https://flagcdn.com/w40/es.png" alt="Español" class="w-6 h-auto rounded-sm">
+            </button>
+            <button onclick="setLanguage('it')" id="lang-it" class="lang-idle border-2 rounded-xl px-2 py-1 transition-all flex items-center justify-center">
+                <img src="https://flagcdn.com/w40/it.png" alt="Italiano" class="w-6 h-auto rounded-sm">
+            </button>
+            <button onclick="setLanguage('pt')" id="lang-pt" class="lang-idle border-2 rounded-xl px-2 py-1 transition-all flex items-center justify-center">
+                <img src="https://flagcdn.com/w40/br.png" alt="Português" class="w-6 h-auto rounded-sm">
+            </button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="text-center w-full max-w-4xl mb-8">
+        <h1 id="t-title" class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-500 to-pink-500 fun-font mb-3 drop-shadow-lg">
+            Lesson 7: The Offbeat
+        </h1>
+        <p id="t-subtitle" class="text-slate-400 font-bold uppercase tracking-widest text-sm md:text-base flex items-center justify-center gap-2">
+            <span>🦘</span> The Kick jumps on the 'and' of 2!
+        </p>
+    </header>
+
+    <!-- Painel Superior: Luzes e BPM -->
+    <div class="w-full max-w-4xl flex flex-col md:flex-row gap-4 justify-between items-stretch mb-6">
+        
+        <!-- Indicador de Pulso (Visual) -->
+        <div class="bg-slate-900/80 border border-slate-700 p-3 md:p-4 rounded-2xl flex-1 flex justify-center items-center gap-4 md:gap-6 shadow-inner">
+            <div class="text-right">
+                <span id="t-tempo" class="text-[10px] md:text-xs font-bold text-slate-400 uppercase block">Tempo</span>
+                <span id="beat-counter" class="text-2xl md:text-3xl font-bold fun-font text-white">1</span>
+            </div>
+            <div id="light-1" class="indicator-idle w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-slate-600 transition-all duration-75"></div>
+            <div id="light-2" class="indicator-idle w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-slate-600 transition-all duration-75"></div>
+            <div id="light-3" class="indicator-idle w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-slate-600 transition-all duration-75"></div>
+            <div id="light-4" class="indicator-idle w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-slate-600 transition-all duration-75"></div>
+        </div>
+
+        <!-- Controles Principais -->
+        <div class="bg-slate-800/90 backdrop-blur-md p-3 md:p-4 rounded-2xl shadow-xl flex-2 border border-slate-700 flex flex-wrap gap-3 md:gap-4 justify-center items-center relative">
+            
+            <div id="t-iphone" class="absolute -top-3 right-4 bg-red-600 text-white text-[9px] md:text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg uppercase tracking-wider animate-pulse">
+                📱 Som iOS: Desative o Silencioso
+            </div>
+
+            <button id="playBtn" class="bg-gradient-to-r from-purple-500 to-fuchsia-600 hover:from-purple-400 hover:to-fuchsia-500 text-white px-5 py-2 md:px-6 md:py-3 rounded-xl font-bold shadow-lg transform active:scale-95 transition flex items-center gap-2 fun-font text-lg md:text-xl min-w-[120px] justify-center">
+                <span id="playIcon">▶</span> <span id="t-play">TOCAR</span>
+            </button>
+
+            <!-- Controle de BPM -->
+            <div class="flex flex-col items-center bg-slate-900/50 px-3 py-2 rounded-xl border border-slate-700 flex-1 min-w-[200px]">
+                <div class="flex items-center gap-2 w-full justify-between mb-1 md:mb-2">
+                    <label id="t-speed" class="text-[9px] md:text-[10px] text-slate-400 uppercase tracking-wider font-bold">Velocidade (BPM)</label>
+                    <span id="bpmDisplay" class="font-mono text-lg md:text-xl font-bold text-purple-400 bg-slate-800 px-2 rounded">90</span>
+                </div>
+                
+                <div class="flex items-center gap-2 mb-2 w-full">
+                    <span class="text-xs">🐢</span>
+                    <input type="range" id="bpm" min="40" max="180" value="90" class="flex-1 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-500">
+                    <span class="text-xs">🐇</span>
+                </div>
+
+                <div class="flex gap-1 md:gap-2 w-full justify-between">
+                    <button onclick="setBPM(60)" class="text-[10px] md:text-xs bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded text-slate-300 transition flex-1 text-center font-bold">60 <span id="t-slow">Lento</span></button>
+                    <button onclick="setBPM(90)" class="text-[10px] md:text-xs bg-purple-900/50 hover:bg-purple-800/80 border border-purple-700/50 px-2 py-1 rounded text-purple-300 transition flex-1 text-center font-bold">90 <span id="t-med">Bounce</span></button>
+                    <button onclick="setBPM(115)" class="text-[10px] md:text-xs bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded text-slate-300 transition flex-1 text-center font-bold">115 <span id="t-fast">Rápido</span></button>
+                </div>
+            </div>
+
+            <!-- Botão Metrônomo Sonoro -->
+            <button id="metronomeBtn" onclick="toggleMetronome()" class="bg-slate-700 border-2 border-slate-600 hover:bg-slate-600 text-white px-3 py-2 md:px-4 rounded-xl font-bold shadow transition flex flex-col items-center justify-center h-full">
+                <span class="text-base md:text-lg">⏱️</span> 
+                <span id="t-click" class="text-[8px] md:text-[10px] uppercase">Click</span>
+            </button>
+
+        </div>
+    </div>
+
+    <!-- SEQUENCIADOR (GRID) 3 LINHAS -->
+    <div class="bg-slate-800 p-2 md:p-6 rounded-2xl md:rounded-[3rem] shadow-2xl border-4 border-slate-700 w-full max-w-4xl relative mb-8">
+        <div class="w-full">
+            
+            <div class="flex justify-between items-end mb-4 ml-[70px] md:ml-[140px] pr-1 md:pr-2">
+                <span id="t-markers" class="text-[9px] md:text-xs text-slate-500 font-bold">MARCADORES DE TEMPO:</span>
+                <div class="flex gap-2">
+                    <button onclick="loadLesson7()" class="text-purple-400 hover:text-purple-300 hover:bg-purple-900/30 text-[9px] md:text-xs font-bold border border-purple-900/50 px-3 py-1 rounded-lg transition"><span id="t-restore">RESTAURAR AULA</span></button>
+                    <button onclick="clearGrid()" class="text-red-400 hover:text-red-300 hover:bg-red-900/30 text-[9px] md:text-xs font-bold border border-red-900/50 px-3 py-1 rounded-lg transition"><span id="t-clear">LIMPAR</span></button>
+                </div>
+            </div>
+
+            <!-- Marcadores de Tempo -->
+            <div class="flex mb-4 ml-[70px] md:ml-[140px] border-b-4 border-slate-600 pb-2">
+                <div class="flex-1 text-center text-slate-300 font-bold text-lg md:text-3xl fun-font bg-slate-900/50 rounded-t mx-0.5 md:mx-1 pt-1 shadow-inner">1</div>
+                <div class="flex-1 text-center text-slate-500 font-bold text-sm md:text-xl pt-2 md:pt-3 mx-0.5 md:mx-1">e</div>
+                <div class="flex-1 text-center text-slate-300 font-bold text-lg md:text-3xl fun-font bg-slate-900/50 rounded-t mx-0.5 md:mx-1 pt-1 shadow-inner">2</div>
+                <div class="flex-1 text-center text-slate-500 font-bold text-sm md:text-xl pt-2 md:pt-3 mx-0.5 md:mx-1">e</div>
+                <div class="flex-1 text-center text-slate-300 font-bold text-lg md:text-3xl fun-font bg-slate-900/50 rounded-t mx-0.5 md:mx-1 pt-1 shadow-inner">3</div>
+                <div class="flex-1 text-center text-slate-500 font-bold text-sm md:text-xl pt-2 md:pt-3 mx-0.5 md:mx-1">e</div>
+                <div class="flex-1 text-center text-slate-300 font-bold text-lg md:text-3xl fun-font bg-slate-900/50 rounded-t mx-0.5 md:mx-1 pt-1 shadow-inner">4</div>
+                <div class="flex-1 text-center text-slate-500 font-bold text-sm md:text-xl pt-2 md:pt-3 mx-0.5 md:mx-1">e</div>
+            </div>
+
+            <!-- LINHA CHIMBAL -->
+            <div class="flex items-center mb-4 p-2 rounded-2xl bg-slate-900/40 border-2 border-slate-700/50">
+                <div class="w-[60px] md:w-[130px] flex-shrink-0 text-center border-r-2 border-slate-700 mr-2 md:mr-4 flex flex-col items-center justify-center">
+                    <div class="w-8 h-8 md:w-16 md:h-16 mb-1">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><line x1="50" y1="20" x2="50" y2="90" stroke="#9ca3af" stroke-width="4"/><ellipse cx="50" cy="45" rx="35" ry="6" fill="#fef08a" stroke="#eab308" stroke-width="3"/><ellipse cx="50" cy="40" rx="35" ry="6" fill="#fef08a" stroke="#eab308" stroke-width="3"/></svg>
+                    </div>
+                    <span id="t-instHihat" class="text-[8px] md:text-xs font-bold text-yellow-400 uppercase hidden md:block tracking-widest">CHIMBAL</span>
+                </div>
+                <div id="row-hihatC" class="flex-1 flex gap-1 md:gap-2"></div>
+            </div>
+
+            <!-- LINHA CAIXA -->
+            <div class="flex items-center mb-4 p-2 rounded-2xl bg-slate-900/40 border-2 border-slate-700/50">
+                <div class="w-[60px] md:w-[130px] flex-shrink-0 text-center border-r-2 border-slate-700 mr-2 md:mr-4 flex flex-col items-center justify-center">
+                    <div class="w-8 h-8 md:w-16 md:h-16 mb-1">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><rect x="15" y="35" width="70" height="30" rx="3" fill="#E0E7FF" stroke="#4F46E5" stroke-width="5"/><line x1="15" y1="50" x2="85" y2="50" stroke="#4F46E5" stroke-width="2"/><line x1="30" y1="15" x2="70" y2="35" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/></svg>
+                    </div>
+                    <span id="t-instSnare" class="text-[8px] md:text-xs font-bold text-indigo-400 uppercase hidden md:block tracking-widest">CAIXA</span>
+                </div>
+                <div id="row-snare" class="flex-1 flex gap-1 md:gap-2"></div>
+            </div>
+
+            <!-- LINHA BUMBO -->
+            <div class="flex items-center p-2 rounded-2xl bg-slate-900/40 border-2 border-slate-700/50">
+                <div class="w-[60px] md:w-[130px] flex-shrink-0 text-center border-r-2 border-slate-700 mr-2 md:mr-4 flex flex-col items-center justify-center">
+                    <div class="w-8 h-8 md:w-16 md:h-16 mb-1">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md"><circle cx="50" cy="50" r="35" fill="#FEE2E2" stroke="#DC2626" stroke-width="6"/><rect x="55" y="60" width="10" height="25" rx="2" fill="#374151" transform="rotate(-15 55 80)"/><line x1="50" y1="50" x2="60" y2="75" stroke="#374151" stroke-width="6"/></svg>
+                    </div>
+                    <span id="t-instKick" class="text-[8px] md:text-xs font-bold text-red-400 uppercase hidden md:block tracking-widest">BUMBO</span>
+                </div>
+                <div id="row-kick" class="flex-1 flex gap-1 md:gap-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INSTRUÇÕES E CANTO -->
+    <div class="w-full max-w-4xl bg-gradient-to-r from-slate-800 to-slate-900 border-l-4 border-purple-500 p-4 md:p-6 rounded-2xl shadow-xl gpu-accelerated mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm md:text-base text-slate-300">
+            <div>
+                <h3 class="text-white font-bold fun-font text-xl md:text-2xl mb-4 flex items-center gap-2">
+                    <span class="mr-2">💡</span><span id="t-howRead">COMO LER ESTA PARTITURA</span>
+                </h3>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3">
+                        <svg viewBox="0 0 100 100" class="w-8 h-8 flex-shrink-0"><line x1="50" y1="20" x2="50" y2="90" stroke="#9ca3af" stroke-width="4"/><ellipse cx="50" cy="45" rx="35" ry="6" fill="#fef08a" stroke="#eab308" stroke-width="3"/><ellipse cx="50" cy="40" rx="35" ry="6" fill="#fef08a" stroke="#eab308" stroke-width="3"/></svg>
+                        <span id="t-rule1"><strong class="text-yellow-400">Linha de Cima:</strong> O Chimbal continua batendo em <strong>todos</strong> os quadrados.</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg viewBox="0 0 100 100" class="w-8 h-8 flex-shrink-0"><rect x="15" y="35" width="70" height="30" rx="3" fill="#E0E7FF" stroke="#4F46E5" stroke-width="5"/><line x1="15" y1="50" x2="85" y2="50" stroke="#4F46E5" stroke-width="2"/><line x1="30" y1="15" x2="70" y2="35" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/></svg>
+                        <span id="t-rule2"><strong class="text-indigo-400">Linha do Meio:</strong> A Caixa bate forte nos números <strong>2</strong> e <strong>4</strong>.</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg viewBox="0 0 100 100" class="w-8 h-8 flex-shrink-0"><circle cx="50" cy="50" r="35" fill="#FEE2E2" stroke="#DC2626" stroke-width="6"/><rect x="55" y="60" width="10" height="25" rx="2" fill="#374151" transform="rotate(-15 55 80)"/><line x1="50" y1="50" x2="60" y2="75" stroke="#374151" stroke-width="6"/></svg>
+                        <span id="t-rule3"><strong class="text-red-400">Linha de Baixo:</strong> O Bumbo bate no 1, e dá um pulo rápido na letra <strong>'e'</strong> depois do 2 e também no 3!</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700 flex flex-col justify-center text-center shadow-inner">
+                <h3 class="text-purple-400 font-bold fun-font text-xl md:text-2xl mb-2 flex items-center justify-center">
+                    <span class="mr-2">🎤</span> <span id="t-vocalTitle">CANTE O RITMO:</span>
+                </h3>
+                <p id="t-vocalSub" class="text-slate-400 mb-4 text-sm italic">A melhor forma de aprender é cantando antes de tocar!</p>
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-600">
+                    <p id="t-vocalText" class="text-lg md:text-xl font-bold text-white fun-font tracking-widest leading-loose">
+                        BUM-tss, TÁ-BUM, BUM-tss, TÁ-tss
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DICA DO PROFESSOR (TÉCNICA) -->
+    <div class="w-full max-w-4xl bg-slate-900/90 border-4 border-purple-500/50 p-6 md:p-10 rounded-[3rem] shadow-2xl mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-purple-400 fun-font mb-6 text-center flex justify-center items-center gap-3">
+            <span class="mr-2">👨‍🏫</span> <span id="t-tipTitle">Dicas do Professor</span>
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-slate-800/80 p-6 rounded-3xl border border-slate-600 shadow-lg hover:border-purple-400 transition-colors">
+                <div class="text-5xl mb-4 text-center">⏳</div>
+                <h3 id="t-tip1" class="text-xl font-bold text-white mb-3 text-center">Paciência!</h3>
+                <p id="t-tip1Desc" class="text-slate-300 text-sm leading-relaxed text-justify">O maior erro aqui é bater o Bumbo junto com a Caixa no tempo 2. O segredo é esperar: A mão bate na Caixa, e só um milissegundo depois, o pé bate no Bumbo. Tenha calma e cante o "TÁ-BUM".</p>
+            </div>
+            
+            <div class="bg-slate-800/80 p-6 rounded-3xl border border-slate-600 shadow-lg hover:border-purple-400 transition-colors">
+                <div class="text-5xl mb-4 text-center">⚖️</div>
+                <h3 id="t-tip2" class="text-xl font-bold text-white mb-3 text-center">A Gangorra 2.0</h3>
+                <p id="t-tip2Desc" class="text-slate-300 text-sm leading-relaxed text-justify">Lembra da gangorra da Lição 1? Ela voltou! Como o bumbo entra logo depois da caixa, o movimento do seu corpo será: braço esquerdo desce, e assim que ele sobe, o seu pé direito pisa. Treine esse movimento do corpo sem as baquetas primeiro.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOBRE A AULA -->
+    <div class="w-full max-w-4xl bg-slate-800/80 border border-slate-700 p-4 md:p-8 rounded-3xl shadow-xl gpu-accelerated mb-12">
+        <h3 class="text-white font-bold fun-font text-2xl md:text-3xl mb-6 flex items-center gap-3 border-b border-slate-700 pb-3">
+            <span class="mr-2">📖</span> <span id="t-aboutTitle">Sobre esta Aula</span>
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm md:text-base text-slate-300 leading-relaxed">
+            
+            <div class="space-y-5">
+                <div>
+                    <h4 id="t-aboutDesc1" class="text-purple-400 font-bold mb-1 uppercase tracking-wider">O que é a Síncope?</h4>
+                    <p id="t-aboutDesc1Text">Na música, tocar "sincopado" ou "no contratempo" significa bater fora do tempo forte (fora dos números). Ao colocar o bumbo na letra "e", nós criamos aquele "Balanço" irresistível que dá vontade de pular!</p>
+                </div>
+                
+                <div>
+                    <h4 id="t-aboutDesc2" class="text-purple-400 font-bold mb-1 uppercase tracking-wider">A Referência Pop/Rock</h4>
+                    <p id="t-aboutDesc2Text">Este é um dos ritmos mais versáteis do mundo. Você vai ouvir essa "puxada" de bumbo em quase todo Pop Rock moderno, do Coldplay ao Imagine Dragons. Ele dá vida à música!</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/50 p-6 rounded-2xl border border-yellow-500/30 flex flex-col justify-center shadow-inner">
+                <h4 id="t-challengeTitle" class="text-yellow-400 font-bold mb-3 uppercase tracking-wider text-lg flex items-center gap-2">
+                    🏆 O Desafio do Canguru
+                </h4>
+                <p id="t-challengeText" class="text-sm md:text-base">
+                    Coloque o simulador em <strong>90 BPM (Bounce)</strong>. O desafio é não deixar o bumbo bater junto com a caixa! O seu pé tem que "pular" como um canguru logo depois que a caixa bate. Tente fazer 8 compassos perfeitos!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- COPYRIGHT FOOTER -->
+    <footer class="w-full max-w-5xl mt-6 mb-4 text-center border-t border-slate-800 pt-6">
+        <p id="t-footer" class="text-xs text-slate-500 font-bold tracking-widest uppercase opacity-60">
+            © 2026 Olavo Galerani de Almeida. Todos os direitos reservados.
+        </p>
+    </footer>
+
+    <!-- SVGs Ocultos para o Grid -->
+    <div style="display:none;">
+        <svg id="svg-hihatC" viewBox="0 0 100 100" class="w-full h-full p-2 md:p-3">
+            <line x1="50" y1="20" x2="50" y2="90" stroke="#9ca3af" stroke-width="4"/>
+            <ellipse cx="50" cy="45" rx="35" ry="6" fill="#fef08a" stroke="#eab308" stroke-width="3"/>
+            <ellipse cx="50" cy="40" rx="35" ry="6" fill="#fef08a" stroke="#eab308" stroke-width="3"/>
+        </svg>
+        <svg id="svg-snare" viewBox="0 0 100 100" class="w-full h-full p-2 md:p-3">
+            <rect x="15" y="35" width="70" height="30" rx="3" fill="#E0E7FF" stroke="#4F46E5" stroke-width="5"/>
+            <line x1="15" y1="50" x2="85" y2="50" stroke="#4F46E5" stroke-width="2"/>
+            <line x1="30" y1="15" x2="70" y2="35" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <svg id="svg-kick" viewBox="0 0 100 100" class="w-full h-full p-2 md:p-3">
+            <circle cx="50" cy="50" r="35" fill="#FEE2E2" stroke="#DC2626" stroke-width="6"/>
+            <rect x="55" y="60" width="10" height="25" rx="2" fill="#374151" transform="rotate(-15 55 80)"/>
+            <line x1="50" y1="50" x2="60" y2="75" stroke="#374151" stroke-width="6"/>
+        </svg>
+        <svg id="svg-empty" viewBox="0 0 100 100" class="w-full h-full opacity-20 p-2 md:p-3">
+            <circle cx="50" cy="50" r="10" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 2"/>
+        </svg>
+    </div>
+
+    <script>
+        // ========================================================
+        // INIT PAGE
+        // ========================================================
+        function initPage() {
+            setLanguage('en'); // Default to English
+            loadLesson7();
+        }
+
+        // ========================================================
+        // AUDIO ENGINE (Synthesizers)
+        // ========================================================
+        let audioCtx;
+        let audioUnlocked = false;
+
+        function initAudio() {
+            if (audioUnlocked) return;
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const buffer = audioCtx.createBuffer(1, 1, 22050);
+            const source = audioCtx.createBufferSource();
+            source.buffer = buffer; source.connect(audioCtx.destination); source.start(0);
+            audioUnlocked = true;
+        }
+
+        document.body.addEventListener('touchstart', initAudio, { once: true });
+        document.body.addEventListener('click', initAudio, { once: true });
+
+        function playHiHatC(time) {
+            const bufferSize = audioCtx.sampleRate * 0.1; 
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+            const noise = audioCtx.createBufferSource(); noise.buffer = buffer;
+            const bandpass = audioCtx.createBiquadFilter(); bandpass.type = 'bandpass'; bandpass.frequency.value = 10000;
+            const gain = audioCtx.createGain();
+            noise.connect(bandpass); bandpass.connect(gain); gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.5, time); gain.gain.exponentialRampToValueAtTime(0.01, time + 0.05); 
+            noise.start(time);
+        }
+
+        function playSnare(time) {
+            const osc = audioCtx.createOscillator(); const oscGain = audioCtx.createGain();
+            osc.type = 'sine'; osc.connect(oscGain); oscGain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(300, time); osc.frequency.exponentialRampToValueAtTime(150, time + 0.1);
+            oscGain.gain.setValueAtTime(1.2, time); oscGain.gain.exponentialRampToValueAtTime(0.01, time + 0.1);
+            osc.start(time); osc.stop(time + 0.1);
+
+            const bufferSize = audioCtx.sampleRate * 0.25; 
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+            const noise = audioCtx.createBufferSource(); noise.buffer = buffer;
+            const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 1500;
+            const noiseGain = audioCtx.createGain();
+            noise.connect(filter); filter.connect(noiseGain); noiseGain.connect(audioCtx.destination);
+            noiseGain.gain.setValueAtTime(1, time); noiseGain.gain.exponentialRampToValueAtTime(0.01, time + 0.25);
+            noise.start(time);
+        }
+
+        function playKick(time) {
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(150, time); osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.5); 
+            gain.gain.setValueAtTime(1, time); gain.gain.exponentialRampToValueAtTime(0.01, time + 0.5);
+            osc.start(time); osc.stop(time + 0.5);
+        }
+
+        function playClick(time, isAccent) {
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine'; osc.frequency.setValueAtTime(isAccent ? 1200 : 800, time);
+            gain.gain.setValueAtTime(0.5, time); gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+            osc.start(time); osc.stop(time + 0.05);
+        }
+
+        // ========================================================
+        // SEQUENCER STATE
+        // ========================================================
+        const STEPS = 8;
+        let isPlaying = false; 
+        let isMetronomeOn = false; 
+        let currentStep = 0; 
+        let nextNoteTime = 0.0; 
+        let bpm = 90;
+        
+        let grid = { hihatC: [0,0,0,0,0,0,0,0], snare: [0,0,0,0,0,0,0,0], kick: [0,0,0,0,0,0,0,0] };
+
+        const svgHihatC = document.getElementById('svg-hihatC').outerHTML;
+        const svgSnare = document.getElementById('svg-snare').outerHTML;
+        const svgKick = document.getElementById('svg-kick').outerHTML;
+        const svgEmpty = document.getElementById('svg-empty').outerHTML;
+
+        function createRow(inst, id, activeSvg) {
+            const container = document.getElementById(id); container.innerHTML = '';
+            grid[inst].forEach((state, i) => {
+                const btn = document.createElement('button'); const isMainBeat = i % 2 === 0; 
+                let cls = "grid-btn relative w-full h-10 md:h-16 rounded-xl flex items-center justify-center border-2 md:border-4 overflow-hidden mx-0.5 md:mx-1 ";
+                
+                // Color classes updated for Lesson 7 Theme (Purple/Fuchsia)
+                if (inst === 'hihatC') cls += state ? "neon-box-yellow bg-yellow-900/40 border-yellow-500" : (isMainBeat ? "border-slate-600 bg-slate-700/30" : "border-slate-800 bg-slate-800/50 opacity-40");
+                else if (inst === 'snare') cls += state ? "neon-box-blue bg-indigo-900/40 border-indigo-500" : (isMainBeat ? "border-slate-600 bg-slate-700/30" : "border-slate-800 bg-slate-800/50 opacity-40");
+                else if (inst === 'kick') cls += state ? "neon-box-red bg-red-900/40 border-red-500" : (isMainBeat ? "border-slate-600 bg-slate-700/30" : "border-slate-800 bg-slate-800/50 opacity-40");
+                
+                btn.className = cls; btn.innerHTML = state ? activeSvg : svgEmpty;
+                btn.onclick = () => { grid[inst][i] ^= 1; render(); }; 
+                container.appendChild(btn);
+            });
+        }
+
+        function render() {
+            createRow('hihatC', 'row-hihatC', svgHihatC);
+            createRow('snare', 'row-snare', svgSnare); 
+            createRow('kick', 'row-kick', svgKick);
+        }
+
+        function nextNote() {
+            const secondsPerBeat = 60.0 / bpm; nextNoteTime += 0.5 * secondsPerBeat; currentStep = (currentStep + 1) % STEPS;
+        }
+
+        function scheduleNote(step, time) {
+            if (grid.hihatC[step]) playHiHatC(time);
+            if (grid.kick[step]) playKick(time); 
+            if (grid.snare[step]) playSnare(time); 
+            
+            if (isMetronomeOn && step % 2 === 0) playClick(time, (step === 0));
+            setTimeout(() => { updateVisuals(step); }, (time - audioCtx.currentTime) * 1000);
+        }
+
+        function updateVisuals(step) {
+            if (step % 2 === 0) {
+                const beatNumber = (step / 2) + 1; document.getElementById('beat-counter').innerText = beatNumber;
+                for(let i=1; i<=4; i++) {
+                    const light = document.getElementById(`light-${i}`);
+                    if(i === beatNumber) {
+                        light.className = "metronome-active w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-yellow-200 transition-all duration-75";
+                        setTimeout(() => { light.className = "indicator-idle w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-slate-600 transition-all duration-300"; }, 150);
+                    }
+                }
+            } else { document.getElementById('beat-counter').innerText = "&"; }
+
+            ['hihatC', 'snare', 'kick'].forEach(inst => {
+                const el = document.getElementById(`row-${inst}`).children[step];
+                if(el) {
+                    const ob = el.style.backgroundColor; el.style.backgroundColor = 'rgba(255,255,255,0.2)';
+                    setTimeout(() => el.style.backgroundColor = ob, 100);
+                }
+                if (el && grid[inst][step]) {
+                    const svg = el.querySelector('svg');
+                    if(svg) { svg.classList.add('beat-active'); setTimeout(() => svg.classList.remove('beat-active'), 150); }
+                }
+            });
+        }
+
+        function scheduler() {
+            while (nextNoteTime < audioCtx.currentTime + 0.1) { scheduleNote(currentStep, nextNoteTime); nextNote(); }
+            if (isPlaying) requestAnimationFrame(scheduler);
+        }
+
+        document.getElementById('playBtn').onclick = () => {
+            initAudio(); isPlaying = !isPlaying;
+            const btn = document.getElementById('playBtn'); const txt = document.getElementById('t-play'); const icon = document.getElementById('playIcon');
+            if (isPlaying) {
+                currentStep = 0; nextNoteTime = audioCtx.currentTime + 0.05; scheduler();
+                btn.classList.replace('from-green-500', 'from-red-500'); btn.classList.replace('to-emerald-600', 'to-red-700');
+                btn.classList.replace('hover:from-green-400', 'hover:from-red-400'); btn.classList.replace('hover:to-emerald-500', 'hover:to-red-600');
+                icon.innerText = '⏹'; txt.innerText = translations[currentLang].stop;
+            } else {
+                btn.classList.replace('from-red-500', 'from-green-500'); btn.classList.replace('to-red-700', 'to-emerald-600');
+                btn.classList.replace('hover:from-red-400', 'hover:from-green-400'); btn.classList.replace('hover:to-red-600', 'hover:to-emerald-500');
+                icon.innerText = '▶'; txt.innerText = translations[currentLang].play; document.getElementById('beat-counter').innerText = "1";
+            }
+        };
+
+        function toggleMetronome() {
+            initAudio(); isMetronomeOn = !isMetronomeOn;
+            const btn = document.getElementById('metronomeBtn');
+            if(isMetronomeOn) { btn.classList.add('btn-metronome-on'); btn.classList.remove('bg-slate-700'); } 
+            else { btn.classList.remove('btn-metronome-on'); btn.classList.add('bg-slate-700'); }
+        }
+
+        function setBPM(newBpm) { bpm = newBpm; document.getElementById('bpm').value = bpm; document.getElementById('bpmDisplay').innerText = bpm; }
+        document.getElementById('bpm').oninput = (e) => { setBPM(e.target.value); };
+        
+        function clearGrid() { grid.hihatC.fill(0); grid.snare.fill(0); grid.kick.fill(0); render(); }
+
+        function loadLesson7() {
+            // AULA 7: O Contratempo (Offbeat)
+            grid.hihatC = [1,1,1,1,1,1,1,1]; 
+            grid.snare  = [0,0,1,0,0,0,1,0]; // Caixa nos números 2 e 4
+            // Bumbo no 1, 'e' do 2. E repete no 3.
+            grid.kick   = [1,0,0,1,1,0,0,0]; 
+            setBPM(90);
+            render();
+        }
+
+        // ========================================================
+        // TRANSLATIONS (i18n) - DE, EN, ES, IT, PT
+        // ========================================================
+        const translations = {
+            en: {
+                backBtn: "BACK TO MENU",
+                title: "Lesson 7: The Offbeat", subtitle: "The Kick jumps on the 'and' of 2!",
+                tempo: "Tempo", play: "PLAY", stop: "STOP", speed: "Speed (BPM)", click: "Click",
+                slow: "Slow", med: "Bounce", fast: "Fast", iphone: "📱 iOS Sound: Silent Mode Off",
+                markers: "BEAT MARKERS:", restore: "RESTORE LESSON", clear: "CLEAR",
+                instSnare: "SNARE", instKick: "KICK DRUM", instHihat: "HI-HAT",
+                howRead: "HOW TO READ THIS SCORE",
+                rule1: "<strong class='text-yellow-400'>Top Line:</strong> The Hi-Hat continues playing on <strong>all</strong> squares.",
+                rule2: "<strong class='text-indigo-400'>Middle Line:</strong> The Snare hits hard on numbers <strong>2</strong> and <strong>4</strong>.",
+                rule3: "<strong class='text-red-400'>Bottom Line:</strong> The Kick drum hits on 1, and makes a quick jump on the <strong>'e'</strong> after 2!",
+                vocalTitle: "SING THE RHYTHM:", vocalSub: "The best way to learn is by singing before playing!",
+                vocalText: "BOOM-tss, KA-BOOM, BOOM-tss, KA-tss",
+                tipTitle: "Teacher's Tips",
+                tip1: "Patience!", tip1Desc: "The biggest mistake here is hitting the Kick together with the Snare on beat 2. The secret is to wait: The hand hits the Snare, and just a millisecond later, the foot hits the Kick. Be patient and sing 'KA-BOOM'.",
+                tip2: "The Seesaw 2.0", tip2Desc: "Remember the seesaw from Lesson 1? It's back! Because the kick comes right after the snare, your body movement will be: left arm goes down, and as soon as it goes up, your right foot steps down. Practice this body movement without the sticks first.",
+                aboutTitle: "About this Lesson",
+                aboutDesc1: "What is Syncopation?", aboutDesc1Text: "In music, playing 'syncopated' or on the 'offbeat' means hitting outside the strong beat (outside the numbers). By putting the kick on the letter 'e', we create that irresistible 'Bounce' that makes you want to jump!",
+                aboutDesc2: "The Pop/Rock Reference", aboutDesc2Text: "This is one of the most versatile rhythms in the world. You'll hear this kick 'pull' in almost all modern Pop Rock, from Coldplay to Imagine Dragons. It brings life to the music!",
+                challengeTitle: "The Kangaroo Challenge",
+                challengeText: "Set the simulator to <strong>90 BPM (Bounce)</strong>. The challenge is not letting the kick hit together with the snare! Your foot has to 'jump' like a kangaroo right after the snare hits. Try to make 8 perfect measures!",
+                footer: "© 2026 Olavo Galerani de Almeida. All rights reserved."
+            },
+            pt: {
+                backBtn: "SUMÁRIO",
+                title: "Lição 7: O Contratempo", subtitle: "O bumbo pula na letra 'e' do 2!",
+                tempo: "Tempo", play: "TOCAR", stop: "PARAR", speed: "Velocidade (BPM)", click: "Click",
+                slow: "Lento", med: "Bounce", fast: "Rápido", iphone: "📱 Som iOS: Desative o Silencioso",
+                markers: "MARCADORES DE TEMPO:", restore: "RESTAURAR AULA", clear: "LIMPAR",
+                instSnare: "CAIXA", instKick: "BUMBO", instHihat: "CHIMBAL",
+                howRead: "COMO LER ESTA PARTITURA",
+                rule1: "<strong class='text-yellow-400'>Linha de Cima:</strong> O Chimbal continua batendo em <strong>todos</strong> os quadrados.",
+                rule2: "<strong class='text-indigo-400'>Linha do Meio:</strong> A Caixa bate forte nos números <strong>2</strong> e <strong>4</strong>.",
+                rule3: "<strong class='text-red-400'>Linha de Baixo:</strong> O Bumbo bate no 1, e dá um pulo rápido na letra <strong>'e'</strong> depois do 2 e também no 3!",
+                vocalTitle: "CANTE O RITMO:", vocalSub: "A melhor forma de aprender é cantando antes de tocar!",
+                vocalText: "BUM-tss, TÁ-BUM, BUM-tss, TÁ-tss",
+                tipTitle: "Dicas do Professor",
+                tip1: "Paciência!", tip1Desc: "O maior erro aqui é bater o Bumbo junto com a Caixa no tempo 2. O segredo é esperar: A mão bate na Caixa, e só um milissegundo depois, o pé bate no Bumbo. Tenha calma e cante o 'TÁ-BUM'.",
+                tip2: "A Gangorra 2.0", tip2Desc: "Lembra da gangorra da Lição 1? Ela voltou! Como o bumbo entra logo depois da caixa, o movimento do seu corpo será: braço esquerdo desce, e assim que ele sobe, o seu pé direito pisa. Treine esse movimento do corpo sem as baquetas primeiro.",
+                aboutTitle: "Sobre esta Aula",
+                aboutDesc1: "O que é a Síncope?", aboutDesc1Text: "Na música, tocar 'sincopado' ou 'no contratempo' significa bater fora do tempo forte (fora dos números). Ao colocar o bumbo na letra 'e', nós criamos aquele 'Balanço' irresistível que dá vontade de pular!",
+                aboutDesc2: "A Referência Pop/Rock", aboutDesc2Text: "Este é um dos ritmos mais versáteis do mundo. Você vai ouvir essa 'puxada' de bumbo em quase todo Pop Rock moderno, do Coldplay ao Imagine Dragons. Ele dá vida à música!",
+                challengeTitle: "O Desafio do Canguru",
+                challengeText: "Coloque o simulador em <strong>90 BPM (Bounce)</strong>. O desafio é não deixar o bumbo bater junto com a caixa! O seu pé tem que 'pular' como um canguru logo depois que a caixa bate. Tente fazer 8 compassos perfeitos!",
+                footer: "© 2026 Olavo Galerani de Almeida. Todos os direitos reservados."
+            },
+            es: {
+                backBtn: "MENÚ PRINCIPAL",
+                title: "Lección 7: El Contratiempo", subtitle: "¡El bombo salta en la 'y' del 2!",
+                tempo: "Tiempo", play: "TOCAR", stop: "PARAR", speed: "Velocidad (BPM)", click: "Click",
+                slow: "Lento", med: "Bounce", fast: "Rápido", iphone: "📱 Sonido iOS: Modo Silencio Off",
+                markers: "MARCADORES:", restore: "RESTAURAR CLASE", clear: "BORRAR",
+                instSnare: "CAJA", instKick: "BOMBO", instHihat: "HI-HAT",
+                howRead: "CÓMO LEER ESTA PARTITURA",
+                rule1: "<strong class='text-yellow-400'>Línea Superior:</strong> El Hi-Hat continúa en <strong>todos</strong> los cuadrados.",
+                rule2: "<strong class='text-indigo-400'>Línea del Medio:</strong> La Caja marca con fuerza los números <strong>2</strong> y <strong>4</strong>.",
+                rule3: "<strong class='text-red-400'>Línea Inferior:</strong> ¡El Bombo golpea en el 1, y da un salto rápido en la <strong>'y'</strong> después del 2!",
+                vocalTitle: "CANTA EL RITMO:", vocalSub: "¡La mejor manera de aprender es cantando antes de tocar!",
+                vocalText: "PUM-tss, TA-PUM, PUM-tss, TA-tss",
+                tipTitle: "Consejos del Profesor",
+                tip1: "¡Paciencia!", tip1Desc: "El mayor error aquí es golpear el Bombo junto con la Caja en el tiempo 2. El secreto es esperar: La mano golpea la Caja, y solo un milisegundo después, el pie golpea el Bombo. Ten calma y canta 'TA-PUM'.",
+                tip2: "El Balancín 2.0", tip2Desc: "¿Recuerdas el balancín de la Lección 1? ¡Ha vuelto! Como el bombo entra justo después de la caja, el movimiento de tu cuerpo será: el brazo izquierdo baja, y en cuanto sube, tu pie derecho pisa. Entrena este movimiento sin baquetas primero.",
+                aboutTitle: "Sobre esta Clase",
+                aboutDesc1: "¿Qué es la Síncopa?", aboutDesc1Text: "En música, tocar 'sincopado' o 'a contratiempo' significa golpear fuera del tiempo fuerte (fuera de los números). Al poner el bombo en la letra 'y', ¡creamos ese 'Balanceo' irresistible que da ganas de saltar!",
+                aboutDesc2: "La Referencia Pop/Rock", aboutDesc2Text: "Este es uno de los ritmos más versátiles del mundo. Escucharás este bombo en casi todo el Pop Rock moderno, desde Coldplay hasta Imagine Dragons. ¡Le da vida a la música!",
+                challengeTitle: "El Desafío del Canguro",
+                challengeText: "Pon el simulador en <strong>90 BPM (Bounce)</strong>. ¡El desafío es no dejar que el bombo golpee junto con la caja! Tu pie tiene que 'saltar' como un canguro justo después de que la caja golpee. ¡Intenta hacer 8 compases perfectos!",
+                footer: "© 2026 Olavo Galerani de Almeida. Todos los derechos reservados."
+            },
+            it: {
+                backBtn: "MENU PRINCIPALE",
+                title: "Lezione 7: Il Controtempo", subtitle: "La cassa salta sulla 'e' del 2!",
+                tempo: "Tempo", play: "SUONA", stop: "FERMA", speed: "Velocità (BPM)", click: "Click",
+                slow: "Lento", med: "Bounce", fast: "Veloce", iphone: "📱 Audio iOS: Disattiva Silenzioso",
+                markers: "INDICATORI DI TEMPO:", restore: "RIPRISTINA LEZIONE", clear: "CANCELLA",
+                instSnare: "RULLANTE", instKick: "CASSA", instHihat: "CHARLESTON",
+                howRead: "COME LEGGERE QUESTA PARTITURA",
+                rule1: "<strong class='text-yellow-400'>Linea Superiore:</strong> Il Charleston continua su <strong>tutti</strong> i quadrati.",
+                rule2: "<strong class='text-indigo-400'>Linea Centrale:</strong> Il Rullante colpisce forte sui numeri <strong>2</strong> e <strong>4</strong>.",
+                rule3: "<strong class='text-red-400'>Linea Inferiore:</strong> La Cassa suona sull'1, e fa un salto veloce sulla <strong>'e'</strong> dopo il 2!",
+                vocalTitle: "CANTA IL RITMO:", vocalSub: "Il modo migliore per imparare è cantare prima di suonare!",
+                vocalText: "TUM-tss, TA-TUM, TUM-tss, TA-tss",
+                tipTitle: "I Consigli del Maestro",
+                tip1: "Pazienza!", tip1Desc: "L'errore più grande qui è colpire la Cassa insieme al Rullante sul tempo 2. Il segreto è aspettare: La mano colpisce il Rullante, e solo un millisecondo dopo, il piede colpisce la Cassa. Mantieni la calma e canta 'TA-TUM'.",
+                tip2: "L'Altalena 2.0", tip2Desc: "Ricordi l'altalena della Lezione 1? È tornata! Dato che la cassa entra subito dopo il rullante, il movimento del tuo corpo sarà: il braccio sinistro scende, e non appena sale, il piede destro spinge. Allenati con questo movimento senza bacchette all'inizio.",
+                aboutTitle: "Info su questa Lezione",
+                aboutDesc1: "Cos'è la Sincope?", aboutDesc1Text: "Nella musica, suonare 'sincopato' o 'in controtempo' significa colpire fuori dal tempo forte (fuori dai numeri). Mettendo la cassa sulla lettera 'e', creiamo quel 'Rimbalzo' irresistibile che fa venire voglia di saltare!",
+                aboutDesc2: "Il Riferimento Pop/Rock", aboutDesc2Text: "Questo è uno dei ritmi più versatili al mondo. Sentirai questo 'tiro' di cassa in quasi tutto il Pop Rock moderno, dai Coldplay agli Imagine Dragons. Dà vita alla musica!",
+                challengeTitle: "La Sfida del Canguro",
+                challengeText: "Imposta il simulatore su <strong>90 BPM (Bounce)</strong>. La sfida è non far suonare la cassa insieme al rullante! Il tuo piede deve 'saltare' come un canguro subito dopo che il rullante colpisce. Prova a fare 8 misure perfette!",
+                footer: "© 2026 Olavo Galerani de Almeida. Tutti i diritti riservati."
+            },
+            de: {
+                backBtn: "HAUPTMENÜ",
+                title: "Lektion 7: Der Offbeat", subtitle: "Die Bassdrum springt auf das 'und' von 2!",
+                tempo: "Takt", play: "SPIELEN", stop: "STOPP", speed: "Tempo (BPM)", click: "Klick",
+                slow: "Langsam", med: "Bounce", fast: "Schnell", iphone: "📱 iOS Ton: Stummmodus aus",
+                markers: "TAKTMARKIERUNGEN:", restore: "LEKTION LADEN", clear: "LÖSCHEN",
+                instSnare: "SNARE", instKick: "BASSDRUM", instHihat: "HI-HAT",
+                howRead: "WIE MAN DIESE PARTITUR LIEST",
+                rule1: "<strong class='text-yellow-400'>Obere Zeile:</strong> Die Hi-Hat spielt weiterhin auf <strong>allen</strong> Quadraten.",
+                rule2: "<strong class='text-indigo-400'>Mittlere Zeile:</strong> Die Snare schlägt hart auf die Zahlen <strong>2</strong> und <strong>4</strong>.",
+                rule3: "<strong class='text-red-400'>Untere Zeile:</strong> Die Bassdrum schlägt auf die 1 und macht einen schnellen Sprung auf dem <strong>'und'</strong> nach der 2!",
+                vocalTitle: "SINGE DEN RHYTHMUS:", vocalSub: "Der beste Weg zu lernen ist, vor dem Spielen zu singen!",
+                vocalText: "BUM-tss, PA-BUM, BUM-tss, PA-tss",
+                tipTitle: "Tipps vom Lehrer",
+                tip1: "Geduld!", tip1Desc: "Der größte Fehler hier ist, die Bassdrum zusammen mit der Snare auf Schlag 2 zu spielen. Das Geheimnis ist zu warten: Die Hand schlägt die Snare, und nur eine Millisekunde später schlägt der Fuß die Bassdrum. Bleib ruhig und singe 'PA-BUM'.",
+                tip2: "Die Wippe 2.0", tip2Desc: "Erinnern Sie sich an die Wippe aus Lektion 1? Sie ist zurück! Da die Bassdrum direkt nach der Snare kommt, wird Ihre Körperbewegung so sein: der linke Arm geht runter, und sobald er hochgeht, tritt der rechte Fuß. Übe diese Bewegung zuerst ohne die Sticks.",
+                aboutTitle: "Über diese Lektion",
+                aboutDesc1: "Was ist Synkopierung?", aboutDesc1Text: "In der Musik bedeutet 'synkopiert' oder 'im Offbeat' spielen, außerhalb des starken Taktschlags (außerhalb der Zahlen) zu schlagen. Indem wir die Bassdrum auf den Buchstaben 'und' setzen, erzeugen wir diesen unwiderstehlichen 'Bounce', der einen springen lässt!",
+                aboutDesc2: "Die Pop/Rock Referenz", aboutDesc2Text: "Dies ist einer der vielseitigsten Rhythmen der Welt. Sie werden diesen Bassdrum-'Zug' in fast jedem modernen Pop-Rock hören, von Coldplay bis Imagine Dragons. Er erweckt die Musik zum Leben!",
+                challengeTitle: "Die Känguru-Herausforderung",
+                challengeText: "Stellen Sie den Simulator auf <strong>90 BPM (Bounce)</strong>. Die Herausforderung besteht darin, die Bassdrum nicht zusammen mit der Snare schlagen zu lassen! Dein Fuß muss wie ein Känguru 'springen', direkt nachdem die Snare schlägt. Versuche, 8 perfekte Takte zu machen!",
+                footer: "© 2026 Olavo Galerani de Almeida. Alle Rechte vorbehalten."
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Highlight active flag
+            document.querySelectorAll('[id^="lang-"]').forEach(btn => {
+                btn.className = "lang-idle border-2 rounded-xl px-2 py-1 transition-all flex items-center justify-center";
+            });
+            const activeBtn = document.getElementById(`lang-${lang}`);
+            if(activeBtn) {
+                activeBtn.className = "lang-active border-2 rounded-xl px-2 py-1 transition-all flex items-center justify-center";
+            }
+
+            const t = translations[lang];
+            if(!t) return;
+            
+            // Safe innerText assignments
+            const safeSetText = (id, text) => { const el = document.getElementById(id); if(el) el.innerText = text; };
+            const safeSetHTML = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
+
+            safeSetHTML('t-backBtn', t.backBtn); 
+            safeSetText('t-title', t.title);
+            safeSetHTML('t-subtitle', `<span>🦘</span> ` + t.subtitle);
+            safeSetText('t-tempo', t.tempo);
+            safeSetText('t-play', isPlaying ? t.stop : t.play);
+            safeSetText('t-speed', t.speed);
+            safeSetText('t-slow', t.slow);
+            safeSetText('t-med', t.med);
+            safeSetText('t-fast', t.fast);
+            safeSetText('t-iphone', t.iphone);
+            safeSetText('t-click', t.click);
+            
+            safeSetText('t-markers', t.markers);
+            safeSetText('t-restore', t.restore);
+            safeSetText('t-clear', t.clear);
+            
+            safeSetText('t-instHihat', t.instHihat);
+            safeSetText('t-instSnare', t.instSnare);
+            safeSetText('t-instKick', t.instKick);
+            
+            safeSetHTML('t-howRead', t.howRead);
+            safeSetHTML('t-rule1', t.rule1);
+            safeSetHTML('t-rule2', t.rule2);
+            safeSetHTML('t-rule3', t.rule3);
+            
+            safeSetText('t-vocalTitle', t.vocalTitle);
+            safeSetText('t-vocalSub', t.vocalSub);
+            safeSetHTML('t-vocalText', t.vocalText);
+
+            safeSetHTML('t-tipTitle', `<span>👨‍🏫</span> ` + (t.tipTitle.replace(/^[^\s]+ /, '') || t.tipTitle));
+            safeSetText('t-tip1', t.tip1);
+            safeSetHTML('t-tip1Desc', t.tip1Desc);
+            safeSetText('t-tip2', t.tip2);
+            safeSetHTML('t-tip2Desc', t.tip2Desc);
+
+            safeSetHTML('t-aboutTitle', `<span>📖</span> ` + (t.aboutTitle.replace(/^[^\s]+ /, '') || t.aboutTitle));
+            safeSetText('t-aboutDesc1', t.aboutDesc1);
+            safeSetText('t-aboutDesc1Text', t.aboutDesc1Text);
+            safeSetText('t-aboutDesc2', t.aboutDesc2);
+            safeSetHTML('t-aboutDesc2Text', t.aboutDesc2Text);
+            
+            safeSetHTML('t-challengeTitle', `<span>🏆</span> ` + (t.challengeTitle.replace(/^[^\s]+ /, '') || t.challengeTitle));
+            safeSetHTML('t-challengeText', t.challengeText);
+            
+            safeSetText('t-footer', t.footer);
+        }
+    </script>
+</body>
+</html>
